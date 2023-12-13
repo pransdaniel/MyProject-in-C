@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+// Fungsi untuk mengonversi bilangan desimal ke biner
+void decimalToBinary(int decimalNumber) {
+    printf("Representasi Biner: ");
+    while (decimalNumber > 0) {
+        printf("%d", decimalNumber % 2);
+        decimalNumber /= 2;
+    }
+    printf("\n");
+}
+
+// Fungsi untuk mengonversi bilangan desimal ke oktal
+void decimalToOctal(int decimalNumber) {
+    printf("Representasi Okta: %o\n", decimalNumber);
+}
+
+// Fungsi untuk mengonversi bilangan desimal ke heksadesimal
+void decimalToHexadecimal(int decimalNumber) {
+    printf("Representasi Heksadesimal: %X\n", decimalNumber);
+}
+
+int main() {
+    int decimalNumber;
+    int continueFlag = 1; // Flag untuk melanjutkan atau menghentikan program
+
+    while (continueFlag) {
+        printf("Masukkan Bilangan Desimal: ");
+        scanf("%d", &decimalNumber);
+
+        decimalToBinary(decimalNumber);
+        decimalToOctal(decimalNumber);
+        decimalToHexadecimal(decimalNumber);
+
+        printf("\nApakah ingin melanjutkan? (1: Ya / 0: Tidak): ");
+        scanf("%d", &continueFlag);
+    }
+
+    printf("Program Selesai.\n");
+
+    return 0;
+}
