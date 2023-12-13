@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    int angkaRandom, tebakan, percobaan = 0;
+
+    // Menghasilkan angka acak antara 1 dan 100
+    srand(time(0));
+    angkaRandom = rand() % 100 + 1;
+
+    printf("Selamat datang di Game Tebak Angka!\n");
+    printf("Saya telah memilih angka antara 1 dan 100. Coba tebak ya!\n");
+    printf("'>' menandakan angka selanjutnya harus lebih tinggi lagi\n");
+    printf("'<' menandakan angka selanjutnya harus lebih rendah lagi\n");
+
+    do {
+        printf("Masukkan tebakan Anda: ");
+        scanf("%d", &tebakan);
+        percobaan++;
+
+        if (tebakan > angkaRandom) {
+            printf("< %d\n", tebakan);
+        } else if (tebakan < angkaRandom) {
+            printf("> %d\n", tebakan);
+        } else {
+            printf("Selamat! Anda berhasil menebak angka %d dalam %d percobaan.\n", angkaRandom, percobaan);
+        }
+    } while (tebakan != angkaRandom);
+
+    return 0;
+}
