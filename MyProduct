@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Struktur untuk menyimpan informasi produk
+struct Product {
+    int id;
+    char name[50];
+    int stock;
+    int price;
+};
+
+// Fungsi untuk menambahkan produk baru
+void addProduct(struct Product *products, int *totalProducts) {
+    printf("Masukkan Nama Produk: ");
+    scanf("%s", products[*totalProducts].name);
+
+    printf("Masukkan Jumlah Produk: ");
+    scanf("%d", &products[*totalProducts].stock);
+
+    printf("Masukkan Harga Produk: ");
+    scanf("%d", &products[*totalProducts].price);
+
+    products[*totalProducts].id = *totalProducts + 1; // Assign ID berdasarkan urutan produk
+    (*totalProducts)++; // Tambahkan total produk
+}
+
+// Fungsi untuk mencatat penjualan produk
+void recordSale(struct Product *products, int totalProducts) {
+    int productId, quantitySold;
+    printf("Masukkan ID Produk yang Terjual: ");
+    scanf("%d", &productId);
+
+    if (productId < 1 || productId > totalProducts) {
+        printf("ID Produk tidak valid.\n");
+        return;
+    }
+
+    printf("Masukkan Jumlah yang Terjual: ");
+    scanf("%d", &quantitySold);
+
+    if (quantitySold > products[productId - 1].stock) {
+        printf("Stok tidak mencukupi.\n");
+        return;
+    }
+
+    products[productId - 1].stock -= quantitySold;
+    printf("Penjualan berhasil dicatat.\n");
+}
+
+// Fungsi untuk menampilkan inventaris
+void displayInventory(const struct Product *products, int totalProducts) {
+    printf("\nID\tNama\tStok\tHarga\n");
+    for (int i = 0; i < totalProducts; ++i) {
+        printf("%d\t%s\t%d\tRp %d\n", products[i].id, products[i].name, products[i].stock, products[i].price);
+    }
+    printf("\n");
+}
+
+// Fungsi untuk mencari nama produk
+void searchProductByName(const struct Product *products, int totalProducts) {
+    char searchName[50];
+    printf("Masukkan Nama Produk yang Dicari: ");
+    scanf("%s", searchName);
+
+    int found = 0;
+    printf("\nID\tNama\tStok\tHarga\n");
+    for (int i = 0; i < totalProducts; ++i) {
+        if (strstr(products[i].name, searchName) != NULL) {
+            printf("%d\t%s\t%d\tRp %d\n", products[i].id, products[i].name, products[i].stock, products[i].price);
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("Produk tidak ditemukan.\n");
+    }
+}
+
+// Fungsi untuk menghitung total pendapatan
+int calculateTotalRevenue(const struct Product *products, int totalProducts) {
+    int totalRevenue = 0;
+    for (int i = 0; i < totalProducts; ++i) {
+        totalRevenue += (products[i].stock * products[i].price);
+    }
+    return totalRevenue;
+}
+
+int main() {
+    struct Product products[100]; // Maksimum 100 produk
+    int totalProducts = 0;
+    int choice;
+
+    do {
+        printf("Pilih Operasi:\n");
+        printf("1. Tambah Produk Baru\n");
+        printf("2. Catat Penjualan\n");
+        printf("3. Tampilkan Inventaris\n");
+        printf("4. Cari Nama Produk\n");
+        printf("5. Tampilkan Pendapatan\n");
+        printf("0. Keluar\n");
+        printf("Pilihan Anda: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addProduct(products, &totalProducts);
+                break;
+            case 2:
+                recordSale(products, totalProducts);
+                break;
+            case 3:
+                displayInventory(products, totalProducts);
+                break;
+            case 4:
+                searchProductByName(products, totalProducts);
+                break;
+            case 5:
+                printf("Pendapatan Total: Rp %d\n", calculateTotalRevenue(products, totalProducts));
+                break;
+            case 0:
+                printf("Program Selesai.\n");
+                break;
+            default:
+                printf("Pilihan tidak valid. Silakan coba lagi.\n");
+        }
+    } while (choice != 0);
+
+    return 0;
+}
