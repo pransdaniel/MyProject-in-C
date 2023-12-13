@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <string.h>
+
+// Struktur untuk menyimpan informasi barang
+struct Item {
+    char name[50];
+    int quantity;
+    float price;
+};
+
+// Struktur untuk menyimpan informasi pembayaran
+struct Payment {
+    char method[20];
+    float amount;
+};
+
+// Fungsi untuk menghitung total pembelian
+float calculateTotal(const struct Item *items, int itemCount) {
+    float total = 0.0;
+    for (int i = 0; i < itemCount; ++i) {
+        total += items[i].quantity * items[i].price;
+    }
+    return total;
+}
+
+// Fungsi untuk menampilkan struk pembelian
+void printReceipt(const struct Item *items, int itemCount, const struct Payment *payment) {
+    printf("\nStruk Pembelian:\n");
+    printf("-------------------------------------------------\n");
+    printf("No.\tNama Barang\tJumlah\tHarga Satuan\tTotal\n");
+    printf("-------------------------------------------------\n");
+    for (int i = 0; i < itemCount; ++i) {
+        printf("%d.\t%s\t\t%d\t%.2f\t\t%.2f\n", i + 1, items[i].name, items[i].quantity, items[i].price, items[i].quantity * items[i].price);
+    }
+    printf("-------------------------------------------------\n");
+    printf("Total Pembelian: %.2f\n", calculateTotal(items, itemCount));
+    
+    if (payment->amount > 0) {
+        printf("Metode Pembayaran: %s\n", payment->method);
+        printf("Total Pembayaran: %.2f\n", payment->amount);
+        printf("Kembalian: %.2f\n", payment->amount - calculateTotal(items, itemCount));
+    }
+
+    printf("-------------------------------------------------\n");
+}
+
+int main() {
+    struct Item items[50];   // Maksimum 50 barang
+    struct Payment payment;   // Informasi pembayaran
+    int itemCount = 0;
+    int continueFlag = 1;     // Flag untuk melanjutkan atau menghentikan program
+
+    while (continueFlag) {
+        printf("Masukkan Nama Barang: ");
+        scanf("%s", items[itemCount].name);
+
+        printf("Masukkan Jumlah Barang: ");
+        scanf("%d", &items[itemCount].quantity);
+
+        printf("Masukkan Harga per Barang: ");
+        scanf("%f", &items[itemCount].price);
+
+        itemCount++; // Tambahkan total barang
+
+        printf("\nApakah ingin memasukkan barang lainnya? (1: Ya / 0: Tidak): ");
+        scanf("%d", &continueFlag);
+    }
+
+    // Pilihan metode pembayaran
+    printf("\nPilih Metode Pembayaran:\n");
+    printf("1. Tunai\n");
+    printf("2. Non-Tunai\n");
+    printf("Pilihan Anda: ");
+    int paymentChoice;
+    scanf("%d", &paymentChoice);
+
+    if (paymentChoice == 1) {
+        // Pembayaran tunai
+        payment.amount = calculateTotal(items, itemCount);
+        strcpy(payment.method, "Tunai");
+    } else if (paymentChoice == 2) {
+        // Pembayaran non-tunai
+        printf("Masukkan Metode Pembayaran (Contoh: Kartu Kredit): ");
+        scanf("%s", payment.method);
+        printf("Masukkan Jumlah Pembayaran: ");
+        scanf("%f", &payment.amount);
+    } else {
+        printf("Pilihan metode pembayaran tidak valid.\n");
+        return 1; // Keluar dari program dengan status error
+    }
+
+    // Tampilkan struk pembelian
+    printReceipt(items, itemCount, &payment);
+
+    return 0;
+}
